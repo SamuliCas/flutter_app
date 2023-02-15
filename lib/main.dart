@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build (BuildContext context) {
     return MaterialApp(
@@ -16,6 +18,8 @@ class MyApp extends StatelessWidget {
 
 
 class MyHomePage extends StatelessWidget {
+  const MyHomePage({super.key});
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,7 +29,7 @@ class MyHomePage extends StatelessWidget {
         drawer: Drawer(
           child: ListView(
             padding: EdgeInsets.zero,
-            children: const <Widget> [
+            children: [ const  
               DrawerHeader(
                 decoration: BoxDecoration(
                   color: Colors.orange,
@@ -40,11 +44,33 @@ class MyHomePage extends StatelessWidget {
                 ListTile(
                   leading: Icon(Icons.settings),
                   title: Text('Settings'),
+                  onTap: (){
+                    Navigator.pop(context);
+                      
+                  },
                   ),
                 ListTile(
                   leading: Icon(Icons.mail),
                   title: Text('Mail'),
+                  onTap: (){
+                    Navigator.push(context, new MaterialPageRoute(builder: (context) => new SecondPage()));
+                    },
                   ),
+                  AboutListTile(
+                    icon: Icon(
+                      Icons.info,
+                    ),
+                    child: Text('About App'),
+                    applicationIcon: Icon(
+                      Icons.local_play,
+                      ),
+                      applicationName: 'My App',
+                      applicationVersion: '1.0.25',
+                      applicationLegalese: '© 2023 Company',
+                      aboutBoxChildren: [
+                        
+                      ],
+                  )
                 ],
               ),
             ),
@@ -68,7 +94,9 @@ class SecondPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text("MySecondPage"),
+      ),
     );
   }
 }
