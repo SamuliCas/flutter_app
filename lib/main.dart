@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:math';
 
 void main() => runApp(MyApp());
 
@@ -11,21 +12,37 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'MyApp',
       theme: ThemeData(primarySwatch: Colors.amber),
-      home: MyHomePage(),
+      home: MyHomePage(title: 'Not used now'),
     );
   }
 }
 
 
-class MyHomePage extends StatelessWidget {
-  const MyHomePage({super.key});
-  
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({Key? key, required this.title}) : super(key: key);
+  final String title;
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+class _MyHomePageState extends State<MyHomePage> {
+  String imageUrl =
+      'https://picsum.photos/400/600'; // API returns a random cat image
+
+  void _resetCat() {
+    setState(
+      () {
+        imageUrl =
+            'https://picsum.photos/400/600/?v=${Random().nextInt(10000000)}'; // sad hack to prevent url (and image) caching
+      },
+    );
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           title: Text("MyHomePage"),
         ),
+        
         drawer: Drawer(
           child: ListView(
             padding: EdgeInsets.zero,
@@ -43,17 +60,17 @@ class MyHomePage extends StatelessWidget {
                ),
                 ListTile(
                   leading: Icon(Icons.settings),
-                  title: Text('Settings'),
+                  title: Text('Second Page'),
                   onTap: (){
-                    Navigator.pop(context);
+                    Navigator.push(context, new MaterialPageRoute(builder: (context) => new SecondPage()));
                       
                   },
                   ),
                 ListTile(
                   leading: Icon(Icons.mail),
-                  title: Text('Mail'),
+                  title: Text('Third Page'),
                   onTap: (){
-                    Navigator.push(context, new MaterialPageRoute(builder: (context) => new SecondPage()));
+                    Navigator.pop(context);
                     },
                   ),
                   AboutListTile(
@@ -75,14 +92,46 @@ class MyHomePage extends StatelessWidget {
               ),
             ),
 
-        body: Center(
-          child: TextButton(
-            child: Text('SecondPage'),
-            onPressed: () => Navigator.push(context, MaterialPageRoute(
-              builder: (context) {
-                return SecondPage();
-            }
-          )),
+
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/images/backroundimage.jpeg'),
+            fit: BoxFit.cover,
+          )
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Image.network(
+              imageUrl,
+              width: double.infinity, // max width
+              height: MediaQuery.of(context).size.height / 1.7,
+              // height: 500, // alternative fixed height
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(10, 30, 10, 10),
+              child: TextButton(
+                style: ButtonStyle(
+                  backgroundColor:  MaterialStateProperty.all(Colors.amberAccent),
+                  padding: MaterialStateProperty.all<EdgeInsets>(
+                    const EdgeInsets.all(5),
+                  ),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5.0),
+                      side: const BorderSide(color: Colors.red),
+                    ),
+                  ),
+                ),
+                onPressed: _resetCat,
+                child: Text(
+                  "Fetch a new image!",
+                  style: Theme.of(context).textTheme.labelLarge,
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -96,6 +145,17 @@ class SecondPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text("MySecondPage"),
+      ),
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/images/backroundimage.jpeg'),
+            fit: BoxFit.cover,
+          )
+        ),
+        child: Container(
+          
+        )
       ),
     );
   }
