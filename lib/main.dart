@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong/latlong.dart';
 
 void main() => runApp(MyApp());
 
@@ -58,19 +60,19 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                   ),
                ),
-                ListTile(
-                  leading: Icon(Icons.settings),
-                  title: Text('Second Page'),
-                  onTap: (){
-                    Navigator.push(context, new MaterialPageRoute(builder: (context) => new SecondPage()));
+                // ListTile(
+                //   leading: Icon(Icons.settings),
+                //   title: Text('Second Page'),
+                //   onTap: (){
+                //     Navigator.push(context, new MaterialPageRoute(builder: (context) => new SecondPage()));
                       
-                  },
-                  ),
+                //   },
+                //   ),
                 ListTile(
-                  leading: Icon(Icons.mail),
-                  title: Text('Third Page'),
+                  leading: Icon(Icons.map),
+                  title: Text('Map Page'),
                   onTap: (){
-                    Navigator.pop(context);
+                    Navigator.push(context, new MaterialPageRoute(builder: (context) => new MapPage()));
                     },
                   ),
                   AboutListTile(
@@ -138,25 +140,49 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
+// class SecondPage extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text("MySecondPage"),
+//         backgroundColor: Colors.amber,
+//       ),
+//       body: Container(
+//         decoration: BoxDecoration(
+//           image: DecorationImage(
+//             image: AssetImage('assets/images/backroundimage.jpeg'),
+//             fit: BoxFit.cover,
+//           )
+//         ),
+//         child: Container(
+          
+//         )
+//       ),
+//     );
+//   }
+// }
 
-class SecondPage extends StatelessWidget {
+class MapPage extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("MySecondPage"),
-      ),
-      body: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/images/backroundimage.jpeg'),
-            fit: BoxFit.cover,
-          )
+        appBar: AppBar(
+          title: Text('Map Page'),
         ),
-        child: Container(
-          
-        )
-      ),
+        body: FlutterMap(
+          options: MapOptions(
+            center: LatLng(65.0121, 25.4651),
+            zoom: 10.0,
+          ),
+          layers: [
+            TileLayerOptions(
+              urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+              subdomains: ['a', 'b', 'c'],
+            ),
+          ],
+        ),
     );
   }
 }
+
